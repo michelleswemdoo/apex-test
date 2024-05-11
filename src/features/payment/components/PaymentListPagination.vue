@@ -1,81 +1,112 @@
 <template>
   <div v-if="data" class="px-6 py-4 flex justify-between items-center">
-    <p>Total Transactions: {{ data.total || 0 }}</p>
+    <div>
+      <label class="flex items-center">
+        <span class="mr-3 text-sm text-[#a0aec0]">Show Result</span>
+
+        <select
+          v-model="perPage"
+          class="border border-[#d5d5d8] accent-[#d4d4df] p-1 font-semibold cursor-pointer rounded-md"
+        >
+          <option v-for="option in perPageOptions" :key="option" :value="option">
+            {{ option }}
+          </option>
+        </select>
+      </label>
+    </div>
 
     <div class="flex gap-1">
       <!-- Prev button -->
-      <button
-        v-if="data.prev_page_url"
+
+      <AppButton
+        class="text-[#a0aec0]"
+        :disabled="data.current_page === 1 || !data.prev_page_url"
         @click="goToPage(currentPage - 1)"
-        class="px-3 py-1 text-gray-500 bg-white hover:bg-blue-200 disabled:bg-blue-300 rounded-lg"
       >
-        Prev
-      </button>
+        <ChevronIcon />
+      </AppButton>
 
       <!-- First page -->
-      <button
-        class="px-3 py-1 rounded-lg"
-        :class="{ 'bg-[#e7f7ef] text-[#0daf60]': currentPage === 1 }"
+      <AppButton
+        :class="[
+          { 'bg-[#e7f7ef] text-[#0daf60]': currentPage === 1, 'text-[#a0aec0]': currentPage !== 1 },
+        ]"
         @click="goToPage(1)"
       >
         1
-      </button>
+      </AppButton>
 
       <!-- Conditional leading ellipsis -->
-      <span v-if="currentPage > 3 && data.last_page > 5" class="px-3 py-1">...</span>
+      <span class="text-[#a0aec0] px-3 py-1" v-if="currentPage > 3 && data.last_page > 5">...</span>
 
       <!-- Dynamic middle pages -->
-      <button
+      <AppButton
         v-for="page in middlePages"
         :key="page"
-        :class="{ 'bg-[#e7f7ef] text-[#0daf60]': page === currentPage }"
+        :class="{
+          'bg-[#e7f7ef] text-[#0daf60]': page === currentPage,
+          'text-[#a0aec0]': page !== currentPage,
+        }"
         @click="goToPage(page)"
-        class="px-3 py-1 rounded-lg"
       >
         {{ page }}
-      </button>
+      </AppButton>
 
       <!-- Conditional trailing ellipsis -->
-      <span v-if="currentPage < data.last_page - 2 && data.last_page > 5" class="px-3 py-1"
-        >...</span
+      <span
+        v-if="currentPage < data.last_page - 2 && data.last_page > 5"
+        class="text-[#a0aec0] px-3 py-1"
       >
+        ...
+      </span>
 
       <!-- Last page -->
-      <button
+      <AppButton
         v-if="data.last_page > 1"
-        :class="{ 'bg-[#e7f7ef] text-[#0daf60]': currentPage === data.last_page }"
+        :class="{
+          'bg-[#e7f7ef] text-[#0daf60]': currentPage === data.last_page,
+          'text-[#A0AEC0]': currentPage !== data.last_page,
+        }"
         @click="goToPage(data.last_page)"
-        class="px-3 py-1 rounded-lg"
       >
         {{ data.last_page }}
-      </button>
+      </AppButton>
 
       <!-- Next button -->
-      <button
-        v-if="data.next_page_url"
-        @click="goToPage(currentPage + 1)"
-        class="px-3 py-1 text-gray-500 bg-white hover:bg-blue-200 rounded-lg"
-      >
-        Next
-      </button>
+      <AppButton :disabled="currentPage === data.last_page" @click="goToPage(currentPage + 1)">
+        <ChevronIcon class="rotate-180 text-[#A0AEC0]" />
+      </AppButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue';
+import { computed, watch, ref, watchEffect } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useGetPayments } from '../composables/useGetPayments';
+import ChevronIcon from '@/assets/icons/ChevronIcon.vue';
+import AppButton from '@/components/ui/AppButton.vue';
 
 const router = useRouter();
 const route = useRoute();
 const { data } = useGetPayments();
 
 const currentPage = ref(1);
+const perPageOptions = [6, 12, 20, 50, 100];
+const perPage = ref(parseInt(route.query.per_page as string) || perPageOptions[0]);
 
 watchEffect(() => {
   currentPage.value = parseInt(route.query.page as string) || 1;
 });
+
+watch(perPage, (newValue) => {
+  router.push({ path: route.path, query: { ...route.query, per_page: newValue } });
+});
+
+const goToPage = (pageNumber: number) => {
+  const path = router.currentRoute.value.path;
+  router.push({ path, query: { ...route.query, page: pageNumber } });
+};
 
 const middlePages = computed(() => {
   const pages: number[] = [];
@@ -87,8 +118,4 @@ const middlePages = computed(() => {
   for (let i = start; i <= end; i++) pages.push(i);
   return pages;
 });
-
-const goToPage = (pageNumber: number) => {
-  router.push({ path: router.currentRoute.value.path, query: { page: pageNumber } });
-};
 </script>
