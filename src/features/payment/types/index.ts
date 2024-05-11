@@ -9,10 +9,12 @@ export type User = {
   updated_at: string;
 };
 
+export type Currency = 'USD' | 'NGN';
+
 export type Payment = {
   amount: number;
   created_at: string;
-  currency: string;
+  currency: Currency;
   id: number;
   payment_expected_at: string;
   payment_made_at: string;

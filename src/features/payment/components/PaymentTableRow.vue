@@ -1,10 +1,13 @@
 <template>
+  <td class="py-3 px-6">
+    <input type="checkbox" class="accent-slate-500" />
+  </td>
   <!-- Name  -->
   <td class="py-3 px-6">
-    <p class="text-base font-semibold leading-6 tracking-wide text-left">
+    <p class="text-sm font-semibold leading-6 tracking-wide text-left">
       {{ payment.user.name }}
     </p>
-    <p class="text-gray-500 text-base font-medium leading-6 tracking-wide text-left">
+    <p class="text-gray-500 text-sm font-medium leading-6 tracking-wide text-left">
       {{ payment.user.email }}
     </p>
   </td>
@@ -20,7 +23,7 @@
       {{ payment.user.status }}
     </AppBadgeChip>
 
-    <p>
+    <p class="text-sm">
       Last Login:
       <template v-if="payment.user.last_login_at">
         {{ formatDate(payment.user.last_login_at) }}
@@ -39,24 +42,38 @@
     >
       {{ checkPaymentStatus(payment) }}
     </AppBadgeChip>
+
     <template v-if="payment.payment_made_at">
-      {{ formatDate(payment.payment_made_at) }}
+      <span class="text-sm">{{ formatDate(payment.payment_made_at) }}</span>
     </template>
   </td>
 
   <!-- Amount -->
   <td class="py-3 px-6">
-    <p class="font-semibold">${{ payment.amount }}</p>
+    <p class="font-semibold text-sm">
+      {{ currentSymbolMap[payment.currency] }}{{ payment.amount }}
+    </p>
 
-    <p>{{ payment.currency }}</p>
+    <p class="text-sm">{{ payment.currency }}</p>
+  </td>
+
+  <!-- Ellipsis -->
+  <td class="py-3 px-6">
+    <EllipsisIcon />
   </td>
 </template>
 
 <script setup lang="ts">
 import { formatDate } from '@/utils/formateDate';
-import { type Payment } from '@/features/payment/types';
+import type { Currency, Payment } from '@/features/payment/types';
 import AppBadgeChip from '@/components/ui/AppBadgeChip.vue';
 import { checkPaymentStatus } from '@/features/payment/utils/checkPaymentStatus';
+import EllipsisIcon from '@/assets/icons/EllipsisIcon.vue';
+
+const currentSymbolMap: Record<Currency, string> = {
+  USD: '$',
+  NGN: '₦',
+};
 
 defineProps<{
   payment: Payment;

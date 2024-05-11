@@ -1,32 +1,32 @@
-# apex-test
+# Apex-test
 
-This template should help get you started developing with Vue 3 in Vite.
+# A simple table which shows a list of payments made.
 
-## Recommended IDE Setup
+This is an application that displays a simple table which shows a list of payments made, the status of those payments, amount and the date the payment was made.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## List of payments in a tabular form
 
-## Type Support for `.vue` Imports in TS
+<img src = "/img/sort-view.png" alt ="sort-view">
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Setup Instructions
 
-## Customize configuration
+```sh
+install node.js
+```
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+### Helps you to write tools for local development.
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compile and Hot-Reload for Development and Manages packages on your local computer, for development.
 
 ```sh
-npm run dev
+npm run start
 ```
 
-### Type-Check, Compile and Minify for Production
+### Type-Check, Compile and Minify for Production run all task for production.
 
 ```sh
 npm run build
@@ -59,3 +59,7 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
+
+## PREVIEW
+
+https://upload-expanses.netlify.app/
