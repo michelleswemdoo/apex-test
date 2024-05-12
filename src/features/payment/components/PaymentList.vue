@@ -25,7 +25,12 @@
 
         <div class="m-6" v-else-if="isError">Unable to load payments: {{ error }}</div>
 
-        <tr v-else class="border-b border-solid" v-for="payment in data?.data" :key="payment.id">
+        <tr
+          v-else
+          class="border-b border-solid relative"
+          v-for="payment in data?.data"
+          :key="payment.id"
+        >
           <PaymentTableRow :payment="payment" />
         </tr>
       </tbody>

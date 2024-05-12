@@ -54,26 +54,30 @@
       {{ currentSymbolMap[payment.currency] }}{{ payment.amount }}
     </p>
 
-    <p class="text-sm">{{ payment.currency }}</p>
+    <p class="text-sm text-[#88888A]">{{ payment.currency }}</p>
   </td>
 
   <!-- Ellipsis -->
   <td class="py-3 px-6">
-    <EllipsisIcon />
+    <button @click="showProfileCard = true"><EllipsisIcon /></button>
+    <ProfileCard :showProfileCard="showProfileCard" @closeProfile="showProfileCard = false" />
   </td>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { formatDate } from '@/utils/formateDate';
 import type { Currency, Payment } from '@/features/payment/types';
 import AppBadgeChip from '@/components/ui/AppBadgeChip.vue';
 import { checkPaymentStatus } from '@/features/payment/utils/checkPaymentStatus';
 import EllipsisIcon from '@/assets/icons/EllipsisIcon.vue';
+import ProfileCard from './ProfileCard.vue';
 
 const currentSymbolMap: Record<Currency, string> = {
   USD: '$',
   NGN: '₦',
 };
+const showProfileCard = ref(false);
 
 defineProps<{
   payment: Payment;
