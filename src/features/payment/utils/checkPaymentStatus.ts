@@ -7,7 +7,7 @@ export const checkPaymentStatus = (payment: Payment): PaymentStatus => {
   const expectedDate = new Date(payment.payment_expected_at);
   const paymentDate = payment.payment_made_at ? new Date(payment.payment_made_at) : null;
 
-  if (paymentDate && paymentDate <= expectedDate) {
+  if (paymentDate && (paymentDate <= expectedDate || paymentDate <= currentDate)) {
     return 'Paid';
   } else if (!paymentDate && currentDate > expectedDate) {
     return 'Overdue';
