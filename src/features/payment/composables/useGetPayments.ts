@@ -10,6 +10,7 @@ export const useGetPayments = () => {
 
   const pageQuery = computed(() => route.query.page || '');
   const perPageQuery = computed(() => route.query.per_page || '');
+  const stateQuery = computed(() => route.query.state || '');
 
   onMounted(async () => {
     await router.isReady();
@@ -17,11 +18,12 @@ export const useGetPayments = () => {
   });
 
   const { data, error, isPending, isError, refetch, isRefetching, isLoading } = useQuery({
-    queryKey: ['payments', pageQuery, perPageQuery],
+    queryKey: ['payments', pageQuery, perPageQuery, stateQuery],
     queryFn: () =>
       getPayments({
         page: `${pageQuery.value}`,
         per_page: `${perPageQuery.value}`,
+        state: `${stateQuery.value}`,
       }),
 
     enabled: isRouterReady,

@@ -1,5 +1,33 @@
 <template>
   <div class="bg-white rounded-lg border-solid border-y">
+    <div class="py-3 px-6">
+      <div
+        class="w-min rounded-xl py-[15px] px-[19px] bg-[#FAFAFA] border border-[#EEEFF2] my-4 ml-auto mr-0 flex items-center gap-1"
+      >
+        <Filter />
+        <span class="font-medium text-[#0CAF60] inline-block ml-2">Filter</span>
+      </div>
+
+      <div>
+        <Input type="text" placeholder="name" v-model="name">Name</Input>
+        <Input type="number" placeholder="amount" v-model="amount">Amount</Input>
+        <Select v-model="userStatus">
+          User’s Status
+          <template v-slot:option>
+            <option v-for="option in UserStatus" :key="option" :value="option">{{ option }}</option>
+          </template>
+        </Select>
+
+        <Select v-model="paymentStatus">
+          Payment Status
+          <template v-slot:option>
+            <option v-for="option in PaymentStatus" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </template>
+        </Select>
+      </div>
+    </div>
     <table class="w-full">
       <thead>
         <tr>
@@ -39,12 +67,31 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue';
+import Filter from '@/assets/icons/Filter.vue';
 import PaymentTableRow from '@/features/payment/components/PaymentTableRow.vue';
+import Input from '@/components/ui/Input.vue';
 
 import { useGetPayments } from '../composables/useGetPayments';
 import PaymentTableRowLoadingSkeleton from './PaymentTableRowLoadingSkeleton.vue';
+import Select from '@/components/ui/Select.vue';
+import { useRouter, useRoute } from 'vue-router';
+
+const name = ref('');
+const amount = ref(0);
+const userStatus = ref('All');
+const paymentStatus = ref('All');
+const router = useRouter();
+const route = useRoute();
 
 const tableHeaders = ['', 'Name', 'User status', 'Payment Status', 'Amount', ''];
 
+watch(paymentStatus, (newValue) => {
+  router.push({ path: route.path, query: { ...route.query, state: newValue.toLocaleLowerCase() } });
+});
+
 const { data, error, isError, isLoading, isPending } = useGetPayments();
+
+const UserStatus = ['All', 'Active', 'Inactive'];
+const PaymentStatus = ['All', 'Paid', 'Unpaid', 'Overdue'];
 </script>

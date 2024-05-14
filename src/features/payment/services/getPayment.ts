@@ -4,6 +4,7 @@ import type { PaymentApiResponse } from '../types';
 type GetPaymentQueryParams = {
   page?: string;
   per_page?: string;
+  state?: string;
 };
 
 export const getPayments = async (
