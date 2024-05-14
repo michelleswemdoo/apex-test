@@ -6,12 +6,14 @@
         v-model="modal"
         class="w-full bg-[#FAFAFA] focus:ring-[#EEEFF2] rounded-xl p-4 text-[#A0AEC0] placeholder:text-[#A0AEC0] focus:outline-none focus:border-[#EEEFF2] focus:border"
       >
-        <slot name="option"></slot>
+        <option v-for="option in options" :key="option" :value="option">{{ option }}</option>
       </select>
     </label>
   </div>
 </template>
 
 <script setup lang="ts">
+defineProps<{ options: Array<string> }>();
+
 const modal = defineModel();
 </script>

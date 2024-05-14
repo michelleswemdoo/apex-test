@@ -1,5 +1,6 @@
 <template>
   <div class="bg-white rounded-lg border-solid border-y">
+    <!-- Filters -->
     <div class="py-3 px-6">
       <div
         class="w-min rounded-xl py-[15px] px-[19px] bg-[#FAFAFA] border border-[#EEEFF2] my-4 ml-auto mr-0 flex items-center gap-1"
@@ -11,21 +12,8 @@
       <div>
         <Input type="text" placeholder="name" v-model="name">Name</Input>
         <Input type="number" placeholder="amount" v-model="amount">Amount</Input>
-        <Select v-model="userStatus">
-          User’s Status
-          <template v-slot:option>
-            <option v-for="option in UserStatus" :key="option" :value="option">{{ option }}</option>
-          </template>
-        </Select>
-
-        <Select v-model="paymentStatus">
-          Payment Status
-          <template v-slot:option>
-            <option v-for="option in PaymentStatus" :key="option" :value="option">
-              {{ option }}
-            </option>
-          </template>
-        </Select>
+        <Select v-model="userStatus" :options="UserStatus"> User’s Status </Select>
+        <Select v-model="paymentStatus" :options="PaymentStatus"> Payment Status </Select>
       </div>
     </div>
     <table class="w-full">
