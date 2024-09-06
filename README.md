@@ -33,3 +33,5 @@ npm run build
 ```sh
 npm run test:unit
 ```
+
+#### Note:The public api is disconnected for now. But every other thing still works fine.
